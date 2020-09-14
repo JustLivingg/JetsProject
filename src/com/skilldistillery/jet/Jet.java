@@ -52,7 +52,7 @@ public void setPrice(long price) {
 }
 
 public void fly() {
-	System.out.println("And we are go for liftoff." + model + " is taking off!"); 
+	System.out.println("And we are go for liftoff. " + model + " is taking off!"); 
 	System.out.println((range/speed) + " hours of flight time. " + "Cost of plane: " + (price));
 	System.out.println();
 }

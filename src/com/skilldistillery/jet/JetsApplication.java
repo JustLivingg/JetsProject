@@ -20,8 +20,8 @@ public class JetsApplication {
 	}
 
 	private void launch(Scanner kb) {
-		
-		
+		loadFile();
+
 		boolean keepGoing = true;
 		int choice;
 
@@ -34,19 +34,20 @@ public class JetsApplication {
 			// item.
 			switch (choice) {
 			case 1:
-				listFleet();
+				this.listFleet();
 				break;
 			case 2:
-				flyAllJets();
+				this.flyAllJets();
 				break;
 			case 3:
-				fastestJet();
+				this.fastestJet();
 				break;
 			case 4:
-				longestJetRange();
+				this.longestJetRange();
 				break;
 			case 5:
-
+				cargoCall();
+				System.out.println();
 				break;
 			case 6:
 				System.out.println("How did you know it was a MIG? Well because it was inverted.");
@@ -55,9 +56,11 @@ public class JetsApplication {
 				break;
 			case 7:
 				addJets();
+				System.out.println();
 				break;
 			case 8:
-
+				deleteJets();
+				System.out.println();
 				break;
 			case 9:
 				System.out.println("You have chosen to quit the program. Goodbye.");
@@ -89,36 +92,14 @@ public class JetsApplication {
 		System.out.println("*************************************************");
 		System.out.println();
 	}
+
 //User story #5
 	public void listFleet() {
-		try {
-			FileReader fr = new FileReader("jets.txt");
-			BufferedReader br = new BufferedReader(fr);
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] fields = line.split(", ");
-				{
-					if (fields[4].contains("cargo")) {
-						CargoPlane newJet = new CargoPlane(fields[0], Double.parseDouble(fields[1]),
-								Integer.parseInt(fields[2]), Long.parseLong(fields[3]));
-						ListJets.add(newJet);
-					}
-					if (fields[4].contains("fighter")) {
-						FighterJet newJet = new FighterJet(fields[0], Double.parseDouble(fields[1]),
-								Integer.parseInt(fields[2]), Long.parseLong(fields[3]));
-						ListJets.add(newJet);
-					}
-					if (fields[4].contains("regular")) {
-						RegularJet newJet = new RegularJet(fields[0], Double.parseDouble(fields[1]),
-								Integer.parseInt(fields[2]), Long.parseLong(fields[3]));
-						ListJets.add(newJet);
-					}
-				}
-			}
-		} catch (IOException e) {
-			System.err.println(e);
+		for (int i = 0; i < ListJets.size(); i++) {
+
+			System.out.println((i + 1) + ": " + ListJets.get(i));
+
 		}
-		System.out.println(ListJets + "\n");
 	}
 
 	public void flyAllJets() {
@@ -139,7 +120,17 @@ public class JetsApplication {
 		System.out.println();
 	}
 
-	
+	public void cargoCall() {
+		for (int i = 0; i < ListJets.size(); i++) {
+			if (ListJets.get(i) instanceof CargoCarrier) {
+
+				CargoPlane plane = (CargoPlane) ListJets.get(i);
+
+				plane.loadCargo();
+			}
+		}
+		System.out.println("All Cargo planes loaded.");
+	}
 
 	public void longestJetRange() {
 		Jet jetRange = ListJets.get(0);
@@ -174,18 +165,62 @@ public class JetsApplication {
 		price = kb.nextLong();
 		System.out.println();
 
-		if (model.contentEquals("Cargo") || model.contentEquals("cargo")) {
+		if (jetType.contentEquals("Cargo") || jetType.contentEquals("cargo")) {
 			this.ListJets.add(new CargoPlane(model, speed, range, price));
+			System.out.println("Cargo plane added.");
 		}
-		if (model.contentEquals("Fighter") || model.contentEquals("fighter")) {
+		if (jetType.contentEquals("Fighter") || jetType.contentEquals("fighter")) {
 			this.ListJets.add(new FighterJet(model, speed, range, price));
+			System.out.println("Fighter plane added.");
 		}
-		if (model.contentEquals("Regular") || model.contentEquals("regular")) {
+		if (jetType.contentEquals("Regular") || jetType.contentEquals("regular")) {
 			this.ListJets.add(new RegularJet(model, speed, range, price));
+			System.out.println("Regular plane added.");
 
 		}
 
 	}
 
-}
+	public void deleteJets() {
+		listFleet();
+		System.out.println("Which Plane would you like to remove?");
+		int input = kb.nextInt();
+		ListJets.remove(input - 1);
+		System.out.println();
+		System.out.println(input + " Has been removed successfully.");
+	}
 
+	public void loadFile() {
+		try {
+			FileReader fr = new FileReader("jets.txt");
+			BufferedReader br = new BufferedReader(fr);
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] fields = line.split(", ");
+				{
+					if (fields[4].contains("cargo")) {
+						CargoPlane newJet = new CargoPlane(fields[0], Double.parseDouble(fields[1]),
+								Integer.parseInt(fields[2]), Long.parseLong(fields[3]));
+						ListJets.add(newJet);
+					}
+					if (fields[4].contains("fighter")) {
+						FighterJet newJet = new FighterJet(fields[0], Double.parseDouble(fields[1]),
+								Integer.parseInt(fields[2]), Long.parseLong(fields[3]));
+						ListJets.add(newJet);
+					}
+					if (fields[4].contains("regular")) {
+						RegularJet newJet = new RegularJet(fields[0], Double.parseDouble(fields[1]),
+								Integer.parseInt(fields[2]), Long.parseLong(fields[3]));
+						ListJets.add(newJet);
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+		for (Jet jet : ListJets) {
+			System.out.println(jet);
+			System.out.println();
+		}
+	}
+}
