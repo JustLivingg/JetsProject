@@ -35,7 +35,7 @@ public void setSpeed(double speed) {
 	this.speed = speed;
 }
 
-public int getRange() {
+public double getRange() {
 	return range;
 }
 
@@ -52,12 +52,9 @@ public void setPrice(long price) {
 }
 
 public void fly() {
-	
-}
-
-public double getSpeedInMach() {
-	return 0.0;
-	
+	System.out.println("And we are go for liftoff." + model + " is taking off!"); 
+	System.out.println((range/speed) + " hours of flight time. " + "Cost of plane: " + (price));
+	System.out.println();
 }
 
 @Override

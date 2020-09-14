@@ -2,6 +2,7 @@ package com.skilldistillery.jet;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -36,19 +37,20 @@ public class JetsApplication {
 				listFleet();
 				break;
 			case 2:
-
+				flyAllJets();
 				break;
 			case 3:
-
+				fastestJet();
 				break;
 			case 4:
-
+				longestJetRange();
 				break;
 			case 5:
 
 				break;
 			case 6:
 				System.out.println("How did you know it was a MIG? Well because it was inverted.");
+				System.out.println("Tom Cruise will be back to fight again in Top Gun 3.");
 				System.out.println();
 				break;
 			case 7:
@@ -87,14 +89,14 @@ public class JetsApplication {
 		System.out.println("*************************************************");
 		System.out.println();
 	}
-
+//User story #5
 	public void listFleet() {
 		try {
 			FileReader fr = new FileReader("jets.txt");
 			BufferedReader br = new BufferedReader(fr);
-			String field;
-			while ((field = br.readLine()) != null) {
-				String[] fields = field.split(",");
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] fields = line.split(", ");
 				{
 					if (fields[4].contains("cargo")) {
 						CargoPlane newJet = new CargoPlane(fields[0], Double.parseDouble(fields[1]),
@@ -113,26 +115,43 @@ public class JetsApplication {
 					}
 				}
 			}
-		} catch (Exception e) {
-
+		} catch (IOException e) {
+			System.err.println(e);
 		}
-
+		System.out.println(ListJets + "\n");
 	}
 
 	public void flyAllJets() {
-
+		for (Jet jet : ListJets) {
+			jet.fly();
+		}
 	}
 
 	public void fastestJet() {
-		double max = 0;
-		String jets = "";
-
-//		for (int i = 0; i < jetsArray.length; i++) {
-
+		Jet speedOfJets = ListJets.get(0);
+		for (int i = 0; i < ListJets.size(); i++) {
+			Jet speedTracker = ListJets.get(i);
+			if (speedOfJets.getSpeed() < speedTracker.getSpeed()) {
+				speedOfJets = speedTracker;
+			}
+		}
+		System.out.println("The fastet " + speedOfJets);
+		System.out.println();
 	}
 
-	public double longestJetRange() {
-		return longestJetRange();
+	
+
+	public void longestJetRange() {
+		Jet jetRange = ListJets.get(0);
+		for (int i = 0; i < ListJets.size(); i++) {
+			Jet longestJetRange = ListJets.get(i);
+			if (jetRange.getRange() < longestJetRange.getRange()) {
+				jetRange = longestJetRange;
+			}
+		}
+		System.out.println(jetRange);
+		System.out.println("Is the plane with the longest range.");
+		System.out.println();
 	}
 
 	public void addJets() {
@@ -169,3 +188,4 @@ public class JetsApplication {
 	}
 
 }
+
